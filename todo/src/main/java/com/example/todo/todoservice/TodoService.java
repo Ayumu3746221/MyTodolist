@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -55,6 +56,18 @@ public class TodoService {
 		
 		
 		return ans;
+	}
+	
+	//Todoを削除するメソッド
+	public String deleteTodo(Integer id) {
+		String messege = null;
+		try {
+			todoRepository.deleteById(id);
+			messege = "delete id'resource";
+		} catch (EmptyResultDataAccessException e) {
+			messege = "id'resource not found";
+		}
+		return messege;
 	}
 	
 }
