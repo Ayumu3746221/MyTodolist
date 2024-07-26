@@ -70,4 +70,15 @@ public class TodoService {
 		return messege;
 	}
 	
+	//Update Todo Method
+	public Todo updateTodo(Integer id,Todo updatetodo) {
+		return todoRepository.findById(id).map(todo -> {
+			todo.setTitle(updatetodo.getTitle());
+			todo.setDitail(updatetodo.getDitail());
+			todo.setDeadline(updatetodo.getDeadline());
+			todo.setDone(updatetodo.getDone());
+			return todoRepository.save(todo);
+		}).orElseThrow(null);
+	}
+	
 }
