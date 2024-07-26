@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -46,8 +48,25 @@ public class TodoController {
 		return todoService.deleteTodo(id);
 	}
 	
+	@PutMapping("/todo/{id}/update")
+	public ResponseEntity<String> updateTodo(@PathVariable Integer id,@RequestBody @Validated TodoData requestUpateTodo,BindingResult result) {
+		
+		boolean isVaild = todoService.isVaild(requestUpateTodo, result);
+		
+		if ( isVaild && !result.hasErrors()) {
+			//Not Error
+			Todo todo = requestUpateTodo.toEntity();
+			todoService.updateTodo(id, todo);
+			
+			return ResponseEntity.ok("OK");
+		}else {
+			String message = result.getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.joining("\n"));
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@PostMapping("/create/todo")
-	public ResponseEntity<String> creatTodo(@Validated TodoData todoData ,BindingResult result) {
+	public ResponseEntity<String> creatTodo(@RequestBody @Validated TodoData todoData ,BindingResult result) {
 		boolean isVaild = todoService.isVaild(todoData, result);
 		
 		if (!result.hasErrors() && isVaild) {
