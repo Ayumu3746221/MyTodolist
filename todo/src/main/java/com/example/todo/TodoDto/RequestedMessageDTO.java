@@ -1,4 +1,4 @@
-package com.example.todo.form;
+package com.example.todo.TodoDto;
 
 
 import java.util.ArrayList;
@@ -9,17 +9,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RequestedMessage {
+public class RequestedMessageDTO {
 	private boolean messegeType;
 	private List<String> errorMessage;
 	
-	public RequestedMessage(boolean messageType,List<String> errorMessage) {
+	public RequestedMessageDTO(boolean messageType,List<String> errorMessage) {
 		this.messegeType = messageType;
 		this.errorMessage = errorMessage;
 	}
 	
-	public List<RequestedMessage> toMessage(){
-		 List<RequestedMessage> messages = new ArrayList<>();
+	public List<RequestedMessageDTO> toMessage(){
+		 List<RequestedMessageDTO> messages = new ArrayList<>();
 		 messages.add(this);
 		 return messages;
 	}

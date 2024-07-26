@@ -2,9 +2,9 @@ package com.example.todo.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.todo.dio.TodoDio;
+import com.example.todo.TodoDto.RequestedMessageDTO;
+import com.example.todo.TodoDto.TodoDTO;
 import com.example.todo.entity.Todo;
-import com.example.todo.form.RequestedMessage;
 import com.example.todo.form.TodoData;
 import com.example.todo.repository.TodoRepository;
 import com.example.todo.todoservice.TodoService;
@@ -35,7 +35,7 @@ public class TodoController {
 	private TodoRepository todoRepository;
 	
 	@GetMapping("/todo")
-	public List<TodoDio> getAllTodo() {
+	public List<TodoDTO> getAllTodo() {
 		return todoService.getTodoList();
 	}
 	
@@ -50,7 +50,7 @@ public class TodoController {
 	}
 	
 	@PutMapping("/todo/{id}/update")
-	public List<RequestedMessage> updateTodo(@PathVariable Integer id,@RequestBody @Validated TodoData requestUpateTodo,BindingResult result) {
+	public List<RequestedMessageDTO> updateTodo(@PathVariable Integer id,@RequestBody @Validated TodoData requestUpateTodo,BindingResult result) {
 		
 		boolean isVaild = todoService.isVaild(requestUpateTodo, result);
 		
@@ -58,26 +58,26 @@ public class TodoController {
 			//Not Error
 			Todo todo = requestUpateTodo.toEntity();
 			todoService.updateTodo(id, todo);
-			return new RequestedMessage(true,null).toMessage();
+			return new RequestedMessageDTO(true,null).toMessage();
 		}else {
 			List<String> message = result.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList());
-			return new RequestedMessage(false,message).toMessage();
+			return new RequestedMessageDTO(false,message).toMessage();
 		}
 	}
 	
 	@PostMapping("/create/todo")
-	public List<RequestedMessage> creatTodo(@RequestBody @Validated TodoData todoData ,BindingResult result) {
+	public List<RequestedMessageDTO> creatTodo(@RequestBody @Validated TodoData todoData ,BindingResult result) {
 		boolean isVaild = todoService.isVaild(todoData, result);
 		
 		if (!result.hasErrors() && isVaild) {
 			//エラーなし
 			Todo todo = todoData.toEntity();
 			todoRepository.saveAndFlush(todo);
-			return new RequestedMessage(true,null).toMessage();
+			return new RequestedMessageDTO(true,null).toMessage();
 		}else {
 			//エラーあり
 			List<String> message = result.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList());
-			return new RequestedMessage(false,message).toMessage();
+			return new RequestedMessageDTO(false,message).toMessage();
 		}
 	}
 }

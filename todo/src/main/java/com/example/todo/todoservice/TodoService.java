@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import com.example.todo.dio.TodoDio;
+import com.example.todo.TodoDto.TodoDTO;
 import com.example.todo.entity.Todo;
 import com.example.todo.form.TodoData;
 import com.example.todo.repository.TodoRepository;
@@ -29,7 +29,7 @@ public class TodoService {
 	}
 	
 	//データのId,title,Doneを取得するメソッド
-	public List<TodoDio> getTodoList(){
+	public List<TodoDTO> getTodoList(){
 		return todoRepository.findIdAndTitleAndDoneList();
 	}
 	
