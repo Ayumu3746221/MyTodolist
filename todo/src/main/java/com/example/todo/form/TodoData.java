@@ -22,7 +22,7 @@ public class TodoData {
 	
 	private String deadline;
 	
-	@NotEmpty(message = "達成度が入力されていません。")
+	@NotEmpty(message = "達成度が入力されていません")
 	private String done;
 	
 	//入力データからEntityを生成して返す
