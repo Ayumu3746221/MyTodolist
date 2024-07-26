@@ -1,6 +1,6 @@
 package com.example.todo.entity;
 
-
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +21,12 @@ public class Todo {
 	
 	@Column(name = "title")
 	private String title;
+	
+	@Column(name = "ditail")
+	private String ditail;
+	
+	@Column(name = "deadline")
+	private Date deadline;
 	
 	@Column(name = "done")
 	private String done;
