@@ -8,6 +8,7 @@ import com.example.todo.entity.Todo;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -15,6 +16,7 @@ public class TodoData {
 	
 	private Integer id;
 	
+	@NotNull(message = "件名を入力してください")
 	@NotBlank(message = "件名を入力してください")
 	private String title;
 	
