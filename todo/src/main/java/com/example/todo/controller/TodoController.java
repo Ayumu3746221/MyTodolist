@@ -2,8 +2,8 @@ package com.example.todo.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.todo.TodoDto.RequestedMessageDTO;
-import com.example.todo.TodoDto.TodoDTO;
+import com.example.todo.dto.RequestedMessageDTO;
+import com.example.todo.dto.TodoDTO;
 import com.example.todo.entity.Todo;
 import com.example.todo.form.TodoData;
 import com.example.todo.repository.TodoRepository;
@@ -40,7 +40,7 @@ public class TodoController {
 	}
 	
 	@GetMapping("/todo/{id}")
-	public Optional<Todo> getMethodName(@PathVariable Integer id) {
+	public Optional<Todo> getTodoById(@PathVariable Integer id) {
 		return todoService.getTodoFindById(id);
 	}
 	
