@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.todo.dto.RequestedMessageDTO;
 import com.example.todo.dto.TodoDTO;
+import com.example.todo.dto.ErrorResponse;
 import com.example.todo.entity.Todo;
 import com.example.todo.form.TodoData;
 import com.example.todo.repository.TodoRepository;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@CrossOrigin("http://localhost:5137/")
+@CrossOrigin("*")
 @AllArgsConstructor
 public class TodoController {
 	private TodoService todoService;
@@ -66,18 +68,18 @@ public class TodoController {
 	}
 	
 	@PostMapping("/create/todo")
-	public List<RequestedMessageDTO> creatTodo(@RequestBody @Validated TodoData todoData ,BindingResult result) {
+	public ResponseEntity<?> creatTodo(@RequestBody @Validated TodoData todoData ,BindingResult result) {
 		boolean isVaild = todoService.isVaild(todoData, result);
 		
 		if (!result.hasErrors() && isVaild) {
 			//エラーなし
 			Todo todo = todoData.toEntity();
-			todoRepository.saveAndFlush(todo);
-			return new RequestedMessageDTO(true,null).toMessage();
+			Todo createdTodo = todoRepository.saveAndFlush(todo);
+			System.out.println(createdTodo);
+			return ResponseEntity.ok(createdTodo);
 		}else {
-			//エラーあり
-			List<String> message = result.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList());
-			return new RequestedMessageDTO(false,message).toMessage();
+			List<String> errorMessages = result.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList());
+			return ResponseEntity.badRequest().body(new ErrorResponse("Validation failed", errorMessages));
 		}
 	}
 }
