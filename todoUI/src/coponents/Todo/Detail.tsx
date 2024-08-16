@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Todo } from "../types/TodoType";
 import { AppDispatch } from "../../redux/store";
-import { addTodo } from "../../redux/todoSlice";
-import { createTodo } from "../../api/todoApi";
-import axios from "axios";
+import { updatedTodo } from "../../redux/todoSlice";
+import { getTodoListById , updateTodo } from "../../api/todoApi";
 
-type FormProps = {
+type DetailProps = {
+    todoId:number
     onClose:() => void,
-    isFormOpen:boolean
+    isDetailOpen:boolean
 }
 
-const Form:React.FC<FormProps> = ({onClose , isFormOpen}) => {
+const Detail:React.FC<DetailProps> = ({todoId , onClose , isDetailOpen}) => {
     const [title , setTitle] = useState("");
     const [ditail , setDitail] = useState("");
     const [deadline , setDeadline] = useState("");
@@ -20,28 +19,40 @@ const Form:React.FC<FormProps> = ({onClose , isFormOpen}) => {
     
     const dispatch = useDispatch<AppDispatch>();
 
+    useEffect(() => {
+        const loadTodo = async(id:number) => {
+            try {
+                const response = (await getTodoListById(id)).data;
+                setTitle(response.title);
+                setDitail(response.ditail);
+                setDeadline(response.deadline);
+                setDone(response.done);
+
+            } catch (error) {
+                console.error("Unexpected ERROR")
+            }
+        }
+
+        if (isDetailOpen === true) {
+            loadTodo(todoId);
+        }
+
+    },[])
+
     const handleSubmit = async (e : React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const newTodo = {id:0 ,title, ditail,deadline,done };
-            const response = (await createTodo(newTodo));
-            const createdTodo:Todo = response.data;
-            dispatch(addTodo(createdTodo));
+            const newTodo = {id:todoId,title, ditail,deadline,done };
+            updateTodo(newTodo);
+            dispatch(updatedTodo(newTodo));
             onClose();
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const errorResponse = error.response?.data;
-                const errorMessage = errorResponse?.message || "An unknown error occurred";
-                console.error("API ERROR",errorMessage)
-            }
-            else{
-                console.error("Unexpected" , error)
-            }
+            console.error("Unexpected" , error)
         }
     }
 
-    if (!isFormOpen) {
+    if (!isDetailOpen) {
         return null;
     }
 
@@ -62,7 +73,7 @@ const Form:React.FC<FormProps> = ({onClose , isFormOpen}) => {
                 <label htmlFor="detail" className="block text-sm font-medium text-gray-700">Detail</label>
                 <input
                     id="title"
-                    type="textarea"
+                    type="text"
                     value={ditail}
                     onChange={(e) => setDitail(e.target.value)}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
@@ -104,11 +115,11 @@ const Form:React.FC<FormProps> = ({onClose , isFormOpen}) => {
                     type="submit"
                     className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 >
-                    Add Todo
+                    Update Todo
                 </button>
             </div>
         </form>
     );
 }
 
-export default Form
+export default Detail
