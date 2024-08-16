@@ -1,5 +1,5 @@
 import { createSlice , PayloadAction } from "@reduxjs/toolkit";
-import { Todo } from "../coponents/types/TodoType";
+import { Todo, TodoItem } from "../coponents/types/TodoType";
 
 interface TodoState {
     todoList: Todo[];
@@ -19,8 +19,11 @@ const todoSlice = createSlice({
         addTodo: (state, action: PayloadAction<Todo>) => {
             state.todoList = [...state.todoList , action.payload]
         },
+        deletedTodo: (state, action: PayloadAction<TodoItem>) => {
+            state.todoList = state.todoList.filter((todo) => todo.id !== action.payload.id)
+        },
     },
 });
 
-export const { setTodos, addTodo } = todoSlice.actions;
+export const { setTodos, addTodo , deletedTodo} = todoSlice.actions;
 export default todoSlice.reducer;
