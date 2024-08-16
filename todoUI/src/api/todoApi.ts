@@ -11,3 +11,7 @@ export const getTodoList = () => api.get('/todo');
 export const createTodo = async (todo:Todo) => {
     return api.post('/create/todo' , todo);
 }
+
+export const deleteTodo = async (id:number) => {
+    return api.delete(`/todo/${id}/delete`);
+}
