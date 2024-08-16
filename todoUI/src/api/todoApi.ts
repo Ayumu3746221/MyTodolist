@@ -7,6 +7,7 @@ const api = axios.create({
 
 //Todoリストの取得
 export const getTodoList = () => api.get('/todo');
+export const getTodoListById = (id:number) => api.get(`/todo/${id}`);
 
 export const createTodo = async (todo:Todo) => {
     return api.post('/create/todo' , todo);
@@ -15,3 +16,8 @@ export const createTodo = async (todo:Todo) => {
 export const deleteTodo = async (id:number) => {
     return api.delete(`/todo/${id}/delete`);
 }
+
+export const updateTodo = async (todo:Todo) => {
+    return api.put(`/todo/${todo.id}/update`,todo);
+}
+
