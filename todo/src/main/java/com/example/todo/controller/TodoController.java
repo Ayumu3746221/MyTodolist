@@ -75,7 +75,6 @@ public class TodoController {
 			//エラーなし
 			Todo todo = todoData.toEntity();
 			Todo createdTodo = todoRepository.saveAndFlush(todo);
-			System.out.println(createdTodo);
 			return ResponseEntity.ok(createdTodo);
 		}else {
 			List<String> errorMessages = result.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList());
