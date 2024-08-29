@@ -1,3 +1,8 @@
 /.metadata/
 .Ds_store
 application.properties
+
+# Docker Setting
+docker-compose.yml
+Dockerfile
+*.env
